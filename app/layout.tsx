@@ -25,6 +25,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="shortcut icon" href="/man.ico" />
+      </head>
       <body className={jetbrainsMono.variable}>
         <Header />
         <StairTransition />
