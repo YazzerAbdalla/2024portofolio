@@ -16,7 +16,6 @@ interface servicesState {
 
 const Services = () => {
   const [servicesData, setServicesData] = useState<servicesState[]>([]);
-  console.log("🚀 ~ Services ~ servicesData:", servicesData);
 
   useEffect(() => {
     // Define your GROQ query
