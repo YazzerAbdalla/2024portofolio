@@ -3,7 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Import the CSS for styling
 import {
   Select,
   SelectContent,
@@ -13,8 +14,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
+import { motion } from "framer-motion";
+import { useState } from "react";
 
 const info = [
   { icon: <FaPhoneAlt />, title: "Phone", description: "+01115782802" },
@@ -29,9 +31,6 @@ const info = [
     description: "7 el2nabi 5lf most4fa bab elsh3ria",
   },
 ];
-
-import { motion } from "framer-motion";
-import { useState } from "react";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -57,9 +56,25 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Replace with your Telegram bot token and chat ID
     const botToken = process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN;
     const chatId = process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID;
+
+    // Form validation
+    if (
+      !formData.firstname ||
+      !formData.lastname ||
+      !formData.email ||
+      !formData.phone ||
+      !formData.service ||
+      !formData.message
+    ) {
+      toast.error("Please make sure all the fields are completed.", {
+        pauseOnHover: true,
+        theme: "dark",
+        position: "top-right",
+      });
+      return;
+    }
 
     const message = `
       Name: ${formData.firstname} ${formData.lastname}\n
@@ -80,6 +95,13 @@ const Contact = () => {
         chat_id: chatId,
         text: message,
       }),
+    });
+
+    // Show a success toast message after form submission
+    toast.success("Your message has been sent successfully!", {
+      pauseOnHover: true,
+      theme: "dark",
+      position: "top-right",
     });
 
     // Clear form data after submission
@@ -104,6 +126,8 @@ const Contact = () => {
     >
       <div className="container mx-auto">
         <div className="flex flex-col xl:flex-row gap-[30px]">
+          {/* ToastContainer should be outside of form */}
+          <ToastContainer />
           {/* form */}
           <div className="xl:2-[54%] order-2 xl:order-none">
             <form
@@ -171,7 +195,7 @@ const Contact = () => {
               <Textarea
                 name="message"
                 className="h-[200px]"
-                placeholder="Type your messsage here."
+                placeholder="Type your message here."
                 value={formData.message}
                 onChange={handleChange}
               />
@@ -186,7 +210,7 @@ const Contact = () => {
             <ul className="flex flex-col gap-10">
               {info.map((item, index) => {
                 return (
-                  <li key={index} className="flex items-center gap-6 ">
+                  <li key={index} className="flex items-center gap-6">
                     <div className="w-[52px] h-[52px] xl:w-[72px] xl:h-[72px] bg-[#27272c] text-accent rounded-md flex items-center justify-center">
                       <div className="text-[28px]">{item.icon}</div>
                     </div>
