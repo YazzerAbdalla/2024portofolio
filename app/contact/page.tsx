@@ -31,8 +31,68 @@ const info = [
 ];
 
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    phone: "",
+    service: "",
+    message: "",
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Replace with your Telegram bot token and chat ID
+    const botToken = process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN;
+    const chatId = process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID;
+
+    const message = `
+      Name: ${formData.firstname} ${formData.lastname}\n
+      Email: ${formData.email}\n
+      Phone: ${formData.phone}\n
+      Service: ${formData.service}\n
+      Message: ${formData.message}
+    `;
+
+    const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+    await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: message,
+      }),
+    });
+
+    // Clear form data after submission
+    setFormData({
+      firstname: "",
+      lastname: "",
+      email: "",
+      phone: "",
+      service: "",
+      message: "",
+    });
+  };
+
   return (
     <motion.section
       initial={{ opacity: 0 }}
@@ -46,40 +106,77 @@ const Contact = () => {
         <div className="flex flex-col xl:flex-row gap-[30px]">
           {/* form */}
           <div className="xl:2-[54%] order-2 xl:order-none">
-            <form className="flex flex-col gap-6 p-10 bg-[#27272c] rounded-xl">
+            <form
+              className="flex flex-col gap-6 p-10 bg-[#27272c] rounded-xl"
+              onSubmit={handleSubmit}
+            >
               <h3 className="text-4xl text-accent">Let&apos;s work together</h3>
               <p className="text-white/60">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
               </p>
-              {/* input */}
+              {/* Input */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Input type="firstname" placeholder="Firstname" />
-                <Input type="lastname" placeholder="Lastname" />
-                <Input type="email" placeholder="Email address" />
-                <Input type="phone" placeholder="Phone number" />
+                <Input
+                  name="firstname"
+                  type="text"
+                  placeholder="Firstname"
+                  value={formData.firstname}
+                  onChange={handleChange}
+                />
+                <Input
+                  name="lastname"
+                  type="text"
+                  placeholder="Lastname"
+                  value={formData.lastname}
+                  onChange={handleChange}
+                />
+                <Input
+                  name="email"
+                  type="email"
+                  placeholder="Email address"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+                <Input
+                  name="phone"
+                  type="text"
+                  placeholder="Phone number"
+                  value={formData.phone}
+                  onChange={handleChange}
+                />
               </div>
-              {/* select */}
-              <Select>
-                <SelectTrigger className="w-full ">
+              {/* Select */}
+              <Select
+                name="service"
+                onValueChange={(value) =>
+                  setFormData({ ...formData, service: value })
+                }
+              >
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select a service" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
                     <SelectLabel> Select a service</SelectLabel>
-                    <SelectItem value="est">Web Development</SelectItem>
-                    <SelectItem value="cst">Freelance</SelectItem>
-                    <SelectItem value="nst">Part time jop </SelectItem>
-                    <SelectItem value="nst">Full time jops</SelectItem>
+                    <SelectItem value="Web Development">
+                      Web Development
+                    </SelectItem>
+                    <SelectItem value="Freelance">Freelance</SelectItem>
+                    <SelectItem value="Part time job">Part-time job</SelectItem>
+                    <SelectItem value="Full time job">Full-time job</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
-              {/* textarea */}
+              {/* Textarea */}
               <Textarea
+                name="message"
                 className="h-[200px]"
                 placeholder="Type your messsage here."
+                value={formData.message}
+                onChange={handleChange}
               />
-              {/* btn */}
-              <Button size="md" className="max-w-40">
+              {/* Button */}
+              <Button size="md" className="max-w-40" type="submit">
                 Send message
               </Button>
             </form>
