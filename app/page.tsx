@@ -13,28 +13,27 @@ export default function Home() {
         <div className="flex flex-col xl:flex-row items-center justify-between xl:pl-8 xl:pb-24">
           {/* text */}
           <div className="text-center xl:text-left order-2 xl:order-none ">
-            <span className="text-xl">Software Developer</span>
-            <h1 className="h1">
-              Hello I&apos;m <br />{" "}
-              <span className="text-accent">Yasser Abdalla</span>
+            <h1 className="h1 -mb-2">
+              Hello, I&apos;m{" "}
+              <span className="text-accent">Yasser Abdalla</span>{" "}
+              <span className="text-[18px]">from cairo</span>
             </h1>
-            <p className="max-w-[500px] mb-9 text-white/80">
-              I excel at crafting elegant digital experiences and I an
-              proficient in various programming languages and technologies.
+            <span className="text-[40px] ">Software Developer</span>
+            <p className="text-[22px] mb-9 mt-6 text-white/80">
+              I&apos;m a junior developer with React.js skills, I aspire to gain
+              more experience by working on advanced applications, supporting
+              key features, and improving workflows. I aim to contribute to code
+              quality and be an active part of a collaborative team.
             </p>
             {/* btn and socials */}
             <div className="flex flex-col xl:flex-row items-center gap-8">
-              <Button
-                variant={"outline"}
-                size={"lg"}
-                className="uppercase flex items-center gap-2"
-              >
+              <Button size={"lg"} className="uppercase flex items-center gap-2">
                 <a
                   href="/yasser-abdalla-resume-2024.pdf"
                   download
                   className="uppercase flex items-center gap-2"
                 >
-                  <span>Download CV</span>
+                  <span className="font-extrabold text-[">Download CV</span>
                   <FiDownload className="text-xl " />
                 </a>
               </Button>
@@ -47,9 +46,9 @@ export default function Home() {
             </div>
           </div>
           {/* photo */}
-          <div className="order-1 xl:order-none mb-8 xl:mb-0">
+          {/* <div className="order-1 xl:order-none mb-8 xl:mb-0">
             <Photo />
-          </div>
+          </div> */}
         </div>
       </div>
       <Stats />
